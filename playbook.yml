@@ -2,28 +2,23 @@
   become: yes
 
   tasks:
-    - name: Add nginx stable repository from PPA and install its signing key on Ubuntu target
-      ansible.builtin.apt_repository:
-        repo: ppa:nginx/stable
-      loop:
-        - ppa:kdenlive/kdenlive-stable
-
     - name: Install packages using apt
       ansible.builtin.apt:
         pkg: 
           - docker.io
+          - ansible
         state: latest
         update_cache: yes
         cache_valid_time: 3600 
     
-    - name: Enable a timer unit for dnf-automatic
+    - name: Enable and restart docker
       ansible.builtin.systemd:
         name: docker
         state: started
         enabled: yes
         daemon_reload: yes
 
-    - name: Add the user 'james' with a bash shell, appending the groups to the user's groups
+    - name: Append docker to theintegrative user
       ansible.builtin.user:
         name: theintegrative
         shell: /bin/bash
