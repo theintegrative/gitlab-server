@@ -3,7 +3,6 @@ services:
   gitlab:
     image: gitlab/gitlab-ee:latest
     ports:
-      - "22:22"
       - "80:80"
       - "443:443"
     volumes:
@@ -18,14 +17,22 @@ services:
         target: /omnibus_config.rb
     secrets:
       - gitlab_root_password
+    networks:
+      - gitlab
   gitlab-runner:
     image: gitlab/gitlab-runner:alpine
     deploy:
       mode: replicated
       replicas: 4
+    networks:
+      - gitlab
+
+networks:
+  gitlab:
 configs:
   gitlab:
     file: ./gitlab.rb
 secrets:
   gitlab_root_password:
     file: ./root_password.txt
+

@@ -1,6 +1,5 @@
 - hosts: all
   become: yes
-
   tasks:
     - name: Install packages using apt
       ansible.builtin.apt:
